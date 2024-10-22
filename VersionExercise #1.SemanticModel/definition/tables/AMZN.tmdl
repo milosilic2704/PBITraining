@@ -1,0 +1,85 @@
+table AMZN
+	lineageTag: 8cfa2ee7-af7d-46c9-bce7-bec8596cddac
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 2702217e-ce01-4533-baa7-d19a7d69c596
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Open
+		dataType: double
+		lineageTag: db496c8f-2002-4089-b76f-bcc6df868cb0
+		summarizeBy: sum
+		sourceColumn: Open
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column High
+		dataType: double
+		lineageTag: c0993b3f-fef3-4bd3-8c50-d54ae28f357e
+		summarizeBy: sum
+		sourceColumn: High
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Low
+		dataType: double
+		lineageTag: 11a41947-b207-4418-9362-4b93614d8350
+		summarizeBy: sum
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Close
+		dataType: double
+		lineageTag: 5d5d4edf-5ed4-48fe-aad5-37d251ce1995
+		summarizeBy: sum
+		sourceColumn: Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Adj Close'
+		dataType: double
+		lineageTag: 4d33bc63-40e7-4a38-b35f-64b6adf43896
+		summarizeBy: sum
+		sourceColumn: Adj Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: int64
+		formatString: 0
+		lineageTag: 95161eac-96e2-41cd-9a98-65772917bf40
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		annotation SummarizationSetBy = Automatic
+
+	partition AMZN = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\MilosIlic\OneDrive - Valcon Business Development A S\Data Plaftom (Power BI)\PBIVersion\PBITraining\AMZN.csv"),[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Open", type number}, {"High", type number}, {"Low", type number}, {"Close", type number}, {"Adj Close", type number}, {"Volume", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
